@@ -21,7 +21,6 @@ import org.openhab.binding.zigbee.converter.ZigBeeBaseChannelConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zsmartsystems.zigbee.CommandResult;
 import com.zsmartsystems.zigbee.ZigBeeEndpoint;
 import com.zsmartsystems.zigbee.zcl.ZclAttribute;
 import com.zsmartsystems.zigbee.zcl.ZclAttributeListener;
@@ -48,15 +47,8 @@ public class ZigBeeConverterTemperature extends ZigBeeBaseChannelConverter imple
             return false;
         }
 
-        CommandResult bindResponse;
         try {
-            bindResponse = bind(cluster).get();
-            if (!bindResponse.isSuccess()) {
-                logger.debug("{}: Failed to bind temperature measurement cluster", endpoint.getIeeeAddress());
-            } else {
-                // Configure reporting
-                cluster.setMeasuredValueReporting(1, REPORTING_PERIOD_DEFAULT_MAX, 0.1);
-            }
+            bind(cluster).get();
         } catch (InterruptedException | ExecutionException e) {
             logger.error("{}: Exception setting reporting ", endpoint.getIeeeAddress(), e);
         }
@@ -64,6 +56,8 @@ public class ZigBeeConverterTemperature extends ZigBeeBaseChannelConverter imple
         // Add a listener, then request the status
         cluster.addAttributeListener(this);
 
+        // Configure reporting
+        cluster.setMeasuredValueReporting(1, REPORTING_PERIOD_DEFAULT_MAX, 0.1);
         return true;
     }
 

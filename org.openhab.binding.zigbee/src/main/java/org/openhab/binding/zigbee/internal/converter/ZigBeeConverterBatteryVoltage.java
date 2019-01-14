@@ -23,7 +23,6 @@ import org.openhab.binding.zigbee.converter.ZigBeeBaseChannelConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zsmartsystems.zigbee.CommandResult;
 import com.zsmartsystems.zigbee.ZigBeeEndpoint;
 import com.zsmartsystems.zigbee.zcl.ZclAttribute;
 import com.zsmartsystems.zigbee.zcl.ZclAttributeListener;
@@ -52,12 +51,11 @@ public class ZigBeeConverterBatteryVoltage extends ZigBeeBaseChannelConverter im
         }
 
         try {
-            CommandResult bindResponse = bind(cluster).get();
-            if (bindResponse.isSuccess()) {
-                ZclAttribute attribute = cluster.getAttribute(ZclPowerConfigurationCluster.ATTR_BATTERYVOLTAGE);
-                // Configure reporting - no faster than once per ten minutes - no slower than every 2 hours.
-                cluster.setReporting(attribute, 600, 7200, 1).get();
-            }
+            bind(cluster).get();
+
+            ZclAttribute attribute = cluster.getAttribute(ZclPowerConfigurationCluster.ATTR_BATTERYVOLTAGE);
+            // Configure reporting - no faster than once per ten minutes - no slower than every 2 hours.
+            cluster.setReporting(attribute, 600, 7200, 1).get();
         } catch (InterruptedException | ExecutionException e) {
             logger.error("{}: Exception setting reporting ", endpoint.getIeeeAddress(), e);
         }
