@@ -55,7 +55,7 @@ public class ZigBeeConverterBatteryVoltage extends ZigBeeBaseChannelConverter im
 
             ZclAttribute attribute = cluster.getAttribute(ZclPowerConfigurationCluster.ATTR_BATTERYVOLTAGE);
             // Configure reporting - no faster than once per ten minutes - no slower than every 2 hours.
-            cluster.setReporting(attribute, 600, 7200, 1).get();
+            cluster.setReporting(attribute, 0, 7200, 1).get();
         } catch (InterruptedException | ExecutionException e) {
             logger.error("{}: Exception setting reporting ", endpoint.getIeeeAddress(), e);
         }

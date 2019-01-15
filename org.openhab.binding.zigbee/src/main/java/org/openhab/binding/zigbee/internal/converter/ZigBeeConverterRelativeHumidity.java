@@ -50,8 +50,8 @@ public class ZigBeeConverterRelativeHumidity extends ZigBeeBaseChannelConverter 
         // Add a listener, then request the status
         cluster.addAttributeListener(this);
 
-        // Configure reporting - no faster than once per second - no slower than 10 minutes.
-        cluster.setMeasuredValueReporting(1, REPORTING_PERIOD_DEFAULT_MAX, 0.1);
+        // Configure reporting - no faster than once per second - no slower than 30 minutes.
+        cluster.setMeasuredValueReporting(0, 1800, 0.1);
         return true;
     }
 

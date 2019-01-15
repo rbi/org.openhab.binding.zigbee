@@ -56,8 +56,8 @@ public class ZigBeeConverterTemperature extends ZigBeeBaseChannelConverter imple
         // Add a listener, then request the status
         cluster.addAttributeListener(this);
 
-        // Configure reporting
-        cluster.setMeasuredValueReporting(1, REPORTING_PERIOD_DEFAULT_MAX, 0.1);
+        // Configure reporting, at least every 30 minutes
+        cluster.setMeasuredValueReporting(0, 1800, 0.1);
         return true;
     }
 
